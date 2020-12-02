@@ -40,7 +40,7 @@ import os
 import time
 import unittest
 if sys.platform == 'darwin':
-    sys.path.append("/Users/daria/pywinauto")
+    sys.path.append(".")
     from pywinauto.macos.application import Application
     from pywinauto.macos.macos_structures import AX_POINT, AX_RECT
 
