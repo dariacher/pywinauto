@@ -33,12 +33,19 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 import sys
-sys.path.append('/Users/daria/pywinauto')
+import time
 
-from pywinauto import application
+from pywinauto.application import Application
 from pywinauto import macos 
+from pywinauto.macos.keyboard_helper import send_keys
 
-app = application.Application()
+app = Application()
 app.start('TextEdit')
-app.kill()
+send_keys("\t This simple example shows how keyboard module works\n")
+send_keys("You can disable space using\n", with_spaces=False)
+send_keys("You can disable \tTAB using\n", with_tabs=False)
+send_keys("Now \t TABs \t are enable.    \n", with_newlines=False)
+send_keys("previous string with disabled newlines")
+time.sleep(5)
+app.kill(soft=False)
 
