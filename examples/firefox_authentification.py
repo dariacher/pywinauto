@@ -1,24 +1,27 @@
 """
-Example script captures network traffic using WireShark and prints a short summary for every protocol.
+Example script fill username and password fields using Windows Authentication
 
-Requirements:
-  - Wireshark 2.2.5
-  - pywinauto 0.6.1+
-This example opens "Wireshark", navigates to 'network_connection_name',
-captures network traffic for 'capture_time' seconds, saves all the data to a temporary file,
-parses it and shows a short summary for every protocol.
+This example opens "Mozilla Firefox" web browser with open authentification window, 
+fill username and password and click button "OK"
 """
 import time
 
 from pywinauto.application import Application
 
-app = Application().connect(title_re=".*Firefox")
+app = Application(backend='uia').connect(title_re=".*Firefox")
 mozilla = app.window(title_re=".*Firefox")
-main_win_wrapper = mozilla.set_focus()
+main_win_wrapper = mozilla.set_focus() # not needed if this is already in focus
 
-time.sleep(1)
-mozilla.type_keys("username")
-mozilla.type_keys("{TAB}")
-mozilla.type_keys("password")
-#mozilla.type_keys("{ENTER}")
+sign_in = mozilla.child_window(auto_id="commonDialogWindow", control_type="Custom")
+# you can also do like this
+# sign_in = mozilla.child_window(title="Authentication required - Mozilla Firefox", control_type="Custom")
+
+username = sign_in.child_window(auto_id="loginTextbox", control_type="Edit")
+password = sign_in.child_window(auto_id="password1Textbox", control_type="Edit")
+sign_in_button = sign_in.child_window(title="OK", control_type="Button")
+
+username.iface_value.SetValue("username")
+password.iface_value.SetValue("password")
+sign_in_button.invoke()
+
 
