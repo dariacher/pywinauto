@@ -34,19 +34,22 @@ from __future__ import unicode_literals
 from __future__ import print_function
 import sys
 import time
-sys.path.append(".")
 
-from pywinauto.application import Application
-from pywinauto import macos 
+from pywinauto.macos.application import Application
+from pywinauto import Desktop
 from pywinauto.macos.keyboard_helper import send_keys
 
 app = Application()
 app.start('TextEdit')
+text_edit = app.Window_().TextEdit
+main_win_wrapper = text_edit.wrapper_object().set_focus()
+
 send_keys("\t This simple example shows how keyboard module works\n")
 send_keys("You can disable space using\n", with_spaces=False)
 send_keys("You can disable \tTAB using\n", with_tabs=False)
 send_keys("Now \t TABs \t are enable.    \n", with_newlines=False)
 send_keys("previous string with disabled newlines")
-time.sleep(5)
-app.kill(soft=False)
+
+close_editor = text_edit.child_window(name='Quit TextEdit', control_type='MenuItem')
+close_editor.select()
 
